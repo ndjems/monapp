@@ -1,0 +1,211 @@
+/* etat_des_fonds.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #056110; /* Vert foncé */
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    width: 80%;
+    max-width: 960px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+main.etat-fonds-content {
+    display: flex;
+    flex-direction: column; /* Organiser les sections verticalement */
+    align-items: center;
+    width: 80%;
+    max-width: 960px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.fonds-section {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.fonds-section h2 {
+    color: #0b0a0a;
+    border-bottom: 2px solid #056110; /* Vert foncé */
+    padding-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+/* Style pour le conteneur des deux cadres */
+#recapitulatif-fonds-cadres {
+    display: flex;
+    gap: 20px;
+    width: 100%; /* Prend toute la largeur de la section récapitulatif */
+    margin-bottom: 20px; /* Espacement entre les cadres et le reste */
+}
+
+#recapitulatif-fonds-cadres .form-fieldset {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+#recapitulatif-fonds-cadres .form-fieldset legend {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    padding: 0 10px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.form-group label {
+    display: inline-block;
+    width: 120px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+#recapitulatif-fonds-cadres .form-fieldset:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#recapitulatif-fonds-cadres .form-fieldset p {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+#recapitulatif-fonds-cadres .form-fieldset p span {
+    font-weight: bold;
+    color: #333;
+}
+
+#button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#button-container button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#retour-btn {
+    background-color: #777777;
+    color: white;
+}
+
+#retour-btn:hover {
+    background-color: #555;
+}
+
+#calculer-etat-btn {
+    background-color: #28a745; /* Vert similaire */
+    color: white;
+}
+
+#calculer-etat-btn:hover {
+    background-color: #1e7e34;
+}
+
+#statistiques-fonds #diagramme-container {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+    color: #777;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        width: 95%;
+        margin-top: 10px;
+    }
+
+    main.etat-fonds-content {
+        width: 95%;
+        padding: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        align-items: stretch; /* Étirer les éléments sur mobile */
+    }
+
+    #recapitulatif-fonds {
+        /* Le titre "Récapitulatif" reste au-dessus */
+        margin-bottom: 10px; /* Réduire la marge en dessous du titre */
+    }
+
+    #recapitulatif-fonds-cadres {
+        flex-direction: column; /* Afficher les cadres verticalement sur mobile */
+        gap: 10px;
+        margin-bottom: 20px; /* Marge en dessous des cadres */
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-group label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    #button-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #button-container button {
+        margin-bottom: 10px;
+    }
+}

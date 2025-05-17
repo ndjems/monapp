@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+}
+
+header {
+    background-color: #056110;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    width: 80%;
+    max-width: 960px;
+    margin-top: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+.rapport-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 960px;
+    flex-grow: 1;
+}
+
+.rapport-section {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h2 {
+    color: #0b0a0a;
+    border-bottom: 2px solid #056110;
+    padding-bottom: 5px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.form-fieldset {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-fieldset legend {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    padding: 0 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+select,
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#date-specifique-container,
+#periode-specifique-container {
+    display: none;
+    margin-top: 10px;
+}
+
+.button-container { /* Correction de la faute de frappe */
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #056110;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #044a0c;
+}
+
+#retour-btn {
+    background-color: #777777;
+}
+
+#retour-btn:hover {
+    background-color: #555;
+}
+
+#statistiques-ventes {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#ventesChart {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+#rapport-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}

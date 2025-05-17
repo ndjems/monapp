@@ -1,0 +1,166 @@
+body {
+    font-family: Arial, sans-serif;
+     margin: 0;
+     padding: 0;
+     background-color: #f4f4f4;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center; /* Centre le contenu horizontalement pour le bureau */
+    }
+    
+    header {
+    background-color: #056110; /* Vert foncé pour l'en-tête des ventes */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    width: 80%; /* Limiter la largeur de l'en-tête sur le bureau */
+    max-width: 960px; /* Largeur maximale raisonnable */
+    margin-top: 20px; /* Ajouter un peu d'espace en haut */
+    }
+    
+    h1 {
+    margin: 0;
+    }
+    
+    .enregistrer-content-desktop {
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 960px;
+    flex-grow: 1; /* Permet de pousser les boutons vers le bas */
+    }
+    
+    .enregistrement-section-desktop {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Prend toute la largeur disponible dans le contenu */
+    }
+    
+    h2 {
+    color: #0b0a0a;
+    border-bottom: 2px solid #056110; /* Vert foncé pour la bordure du titre des ventes */
+    padding-bottom: 5px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    }
+    
+    /* Styles pour le formulaire */
+    .vente-form-desktop {
+    display: flex;
+    gap: 20px; /* Espacement entre les fieldsets */
+    margin-bottom: 20px; /* Espacement avant la section des boutons */
+    }
+    
+    .form-fieldset {
+    flex: 1; /* Permet aux fieldsets de prendre une part égale de l'espace */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 15px;
+    }
+    
+    .form-fieldset legend {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    padding: 0 10px;
+    }
+    
+    .form-group {
+    margin-bottom: 15px;
+    }
+    
+    label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+    
+    /* Styles pour la section contenant les boutons */
+    .enregistrer-content-desktop > section:nth-child(2) { /* Sélectionne la deuxième section dans main */
+    display: flex;
+    justify-content: flex-end; /* Aligner les boutons à gauche */
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px; /* Espacement au-dessus de la section des boutons */
+    margin-bottom: 20px; /* Espacement avant la liste des ventes */
+    }
+    
+    .form-actions-desktop {
+    display: flex; /* Pour aligner les boutons Retour et Enregistrer si nécessaire */
+    gap: 10px;
+    }
+    
+    button {
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    }
+    
+    #enregistrer-btn {
+    background-color: #056110; /* Vert foncé pour Enregistrer */
+    color: white;
+    }
+    
+    #enregistrer-btn:hover {
+    background-color: #044a0c;
+    }
+    
+    #retour-btn {
+    background-color: #777777; /* Gris pour Retour */
+    color: white;
+    }
+    
+    #retour-btn:hover {
+    background-color: #555;
+    }
+    
+    /* Styles pour le tableau */
+    #ventes-table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+    width: 100%;
+    }
+    
+    #ventes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    }
+    
+    #ventes-table th,
+    #ventes-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    }
+    
+    #ventes-table th {
+    background-color: #056110;
+    color: white;
+    }
+    
+    #ventes-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+    }
+    

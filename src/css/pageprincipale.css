@@ -1,0 +1,244 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex; /* Pour la disposition globale header/nav/main/footer */
+    flex-direction: column; /* Empiler les éléments verticalement */
+    min-height: 100vh; /* Assure que le body prend au moins toute la hauteur de la fenêtre */
+}
+
+header {
+    background-color: #f0f0f0;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+header h1 {
+    margin-bottom: 5px;
+}
+
+.content-area {
+    display: flex; /* Pour la disposition sidebar/main content */
+    flex-grow: 1; /* Permet à la zone de contenu de s'étendre */
+    margin-left: 0;
+    transition: margin-left 0.3s ease; /* Pour l'animation de la sidebar */
+}
+
+.content-area.sidebar-open {
+    margin-left: 250px; /* Largeur de la sidebar */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f0f0f0;
+    height: auto; /* S'adapte au contenu */
+    overflow-x: hidden;
+    padding-top: 20px;
+    /* Modification du positionnement */
+    transform: translateX(-250px); /* Cache la sidebar initialement */
+    transition: transform 0.3s ease;
+    z-index: 110;
+    position: absolute; /* Positionnée absolument à l'intérieur de .content-area */
+    top: 0; /* Alignée au haut de .content-area */
+    left: 0;
+    bottom: 0; /* S'étend jusqu'en bas de .content-area */
+}
+
+.sidebar.open {
+    left: 0; /* Affiche la sidebar */
+}
+
+.submenu {
+    padding-left: 20px;
+    padding-right: 20px;
+    display: none;
+}
+
+.submenu.open {
+    display: block;
+}
+
+.submenu h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.submenu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.submenu li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.submenu li:last-child {
+    border-bottom: none;
+}
+
+.submenu a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+}
+
+.submenu a:hover {
+    background-color: #e0e0e0;
+}
+
+.add-submenu-item {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.add-submenu-item:hover {
+    background-color: #3e8e41;
+}
+
+.main-content {
+    padding: 20px;
+    flex-grow: 1; /* Le contenu principal prend l'espace restant */
+}
+
+.main-nav {
+    background-color: #054a14;
+    color: rgb(12, 10, 10);
+    padding: 10px 0;
+    width: 100%; /* La barre de navigation prend toute la largeur */
+    box-shadow: 0 2px 4px rgba(254, 253, 253, 0.1);
+    position: sticky; /* Fixe la barre de navigation en haut lors du défilement */
+    top: 0;
+    z-index: 100; /* Assure qu'elle est au-dessus des autres éléments */
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.main-nav li.module-card.nav-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    border: 1px solid #ccc; /* Ajout d'une bordure pour les modules */
+    background-color: #f4f6f4;
+}
+
+.main-nav li.module-card.nav-module:hover {
+    background-color: #054a14;
+    border: #054a14 1px solid; /* Bordure verte au survol */
+}
+
+.main-nav li.module-card.nav-module i {
+    margin-bottom: 5px;
+    color: #1b1a1a;
+}
+
+.main-nav li.module-card.nav-module span {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+/* Style pour le menu actif */
+.main-nav li.module-card.nav-module.active {
+    background-color: #054a14; /* Ou une autre couleur pour indiquer l'état actif */
+    border: 1px solid #054a14; /* Bordure verte pour le module actif */
+}
+
+.main-nav li a.module-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    background-color: white;
+}
+
+.main-nav li a.module-card:hover {
+    background-color: #054a14;
+}
+
+.main-nav li a.module-card i {
+    margin-bottom: 5px;
+    color: #1b1a1a;
+}
+
+.main-nav li a.module-card span {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+footer {
+    background-color: rgb(5, 74, 20);
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #000000;
+}
+
+.logout-container {
+    text-align: center; /* Centre le bouton horizontalement */
+    padding: 20px 0; /* Ajoute un peu d'espace au-dessus et en dessous */
+}
+
+/* Positionnement du conteneur de déconnexion près du footer */
+.content-area {
+    display: flex;
+    flex-direction: column; /* Organise la sidebar et le contenu verticalement */
+    flex-grow: 1;
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+    position: relative; /* Crée un contexte de positionnement pour le conteneur de déconnexion */
+}
+
+.content-area.sidebar-open {
+    margin-left: 250px;
+}
+
+.logout-container {
+    text-align: center;
+    padding: 20px;
+    position: absolute; /* Positionne le conteneur absolument */
+    bottom: 60px; /* Ajuster en fonction de la hauteur du footer */
+    left: 50%; /* Centre horizontalement */
+    transform: translateX(-50%); /* Ajuste pour le centrage précis */
+    width: 100%; /* Prend toute la largeur du content-area */
+}
+
+#logout-btn {
+    padding: 10px 20px;
+    background-color: #808080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
