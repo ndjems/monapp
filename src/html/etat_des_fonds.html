@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>_
+
+<head>
+    <meta charset="UTF-8">
+    <title>État des Fonds - K2N Services</title>
+    <link rel="stylesheet" href="../css/etat_des_fonds.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <h1>État des Fonds</h1>
+    </header>
+
+    <main class="etat-fonds-content">
+        <section id="recapitulatif-fonds" class="fonds-section">
+            <h2>Récapitulatif</h2>
+            <fieldset class="form-fieldset">
+                <legend>Informations Générales</legend>
+            <div class="form-group">
+                <label for="periode-debut">Date de Début:</label>
+                <input type="date" id="periode-debut">
+            </div>
+            <div class="form-group">
+                <label for="periode-fin">Date de Fin:</label>
+                <input type="date" id="periode-fin">
+            </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+                <legend>Statistiques Numerique</legend>
+                    <p>Somme Totale Perçue : <span id="sommeTotalePercue">0</span></p>
+                    <p>Total des Frais d'Acquisition : <span id="totalFraisAcquisition">0</span></p>
+                    <p>Bénéfice / Perte : <span id="beneficePerte">0</span></p>
+                    <p>Fonds Total Actuel : <span id="fondsTotalActuel">0</span></p>
+            </fieldset>
+        </section>
+
+        <div id="button-container">
+             <button id="retour-btn">Retour</button>
+             <button id="calculer-etat-btn">Calculer l'État des Fonds</button>
+        </div>
+
+        <section id="statistiques-fonds" class="fonds-section">
+            <h2>Statistiques (Période Sélectionnée)</h2>
+            <div id="diagramme-container">
+                <p>Diagramme récapitulatif des revenus et dépenses.</p>
+            </div>
+            </section>
+    </main>
+
+    <script src="../js/etat_des_fonds.js"></script>
+    <script>
+        document.getElementById('retour-btn').addEventListener('click', () => {
+            window.location.href = 'pageprincipale.html';
+        });
+    </script>
+</body>
+
+</html>

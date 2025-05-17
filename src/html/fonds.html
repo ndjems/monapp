@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Enregistrer un Fonds - K2N Services</title>
+    <link rel="stylesheet" href="../css/fonds.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 0.5em;
+        }
+
+        .feedback-message {
+            color: green;
+            font-size: 1em;
+            margin-top: 0.5em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Enregistrer un Fonds</h1>
+    </header>
+
+    <main class="enregistrer-content">
+        <section id="enregistrer-fonds" class="enregistrement-section">
+            <h2>Formulaire</h2>
+            <form id="fonds-form">
+                <fieldset class="form-fieldset">
+                    <legend>Informations sur le Fonds</legend>
+                    <div class="form-group">
+                        <label for="nom-crediteur">Nom du Créditeur:</label>
+                        <input type="text" id="nom-crediteur" name="nom-crediteur" required>
+                        <div id="nom-crediteur-error" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="somme-percue">Somme Perçue:</label>
+                        <input type="number" id="somme-percue" name="somme-percue" step="0.01" required>
+                        <div id="somme-percue-error" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="date-fonds">Date:</label>
+                        <input type="date" id="date-fonds" name="date-fonds" required>
+                        <div id="date-fonds-error" class="error-message"></div>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button type="button" id="retour-btn">Retour</button>
+                    <button type="submit" id="enregistrer-fonds-btn">Enregistrer les Fonds</button>
+                </div>
+            </form>
+            <div id="form-feedback" class="feedback-message" style="display: none;"></div>
+        </section>
+        <section id="liste-fonds" class="enregistrement-section">
+            <h2>Liste des Fonds</h2>
+            <div id="fonds-table-container">
+                <table id="fonds-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du Créditeur</th>
+                            <th>Somme Perçue</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Les fonctions de la base de données sont maintenant définies ici, dans le même fichier.
+        const sqlite3 = window.require('sqlite3').verbose(); // Utilisez window.require dans Electron
+        const path = window.require('path');
+        const {
+            app
+        } = window.require('electron').remote;
+
+        let db;
+
+        function initializeDatabase(dbName = 'k2n_services.db') {
+            return new Promise((resolve, reject) => {
+                const dbPath = path.join(app.getPath('userData'), dbName);
+                db = new sqlite3.Database(dbPath, (err) => {
+                    if (err) {
+                        console.error("Erreur lors de l'ouverture de la base de données :", err.message);
+                        reject(err);
+                        return;
+                    }
+                    console.log('Base de données initialisée avec succès.');
+                    db.run(`CREATE TABLE IF NOT EXISTS fonds (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        nom_crediteur TEXT NOT NULL,
+                        somme_percue REAL NOT NULL,
+                        date_fonds TEXT NOT NULL
+                    )`, (createErr) => {
+                        if (createErr) {
+                            console.error("Erreur lors de la création de la table 'fonds' :", createErr.message);
+                            reject(createErr);
+                            return;
+                        }
+                        resolve();
+                    });
+                });
+            });
+        }
+
+        function getDB() {
+            return db;
+        }
+
+        function closeDatabase() {
+            return new Promise((resolve, reject) => {
+                if (db) {
+                    db.close((err) => {
+                        if (err) {
+                            console.error("Erreur lors de la fermeture de la base de données :", err.message);
+                            reject(err);
+                        } else {
+                            console.log('Base de données fermée avec succès.');
+                            resolve();
+                        }
+                    });
+                } else {
+                    resolve();
+                }
+            });
+        }
+
+        function enregistrerFonds(fonds) {
+            return new Promise((resolve, reject) => {
+                const {
+                    nom_crediteur,
+                    somme_percue,
+                    date_fonds
+                } = fonds;
+                const sql = `INSERT INTO fonds (nom_crediteur, somme_percue, date_fonds)
+                            VALUES (?, ?, ?)`;
+                db.run(sql, [nom_crediteur, somme_percue, date_fonds], function (err) {
+                    if (err) {
+                        console.error("Erreur lors de l'insertion des fonds :", err.message);
+                        reject(err);
+                        return;
+                    }
+                    resolve(this.lastID); // Retourne l'ID du dernier fonds inséré
+                });
+            });
+        }
+
+        function getAllFonds() {
+            return new Promise((resolve, reject) => {
+                const sql = `SELECT id, nom_crediteur, somme_percue, date_fonds FROM fonds`;
+                db.all(sql, [], (err, rows) => {
+                    if (err) {
+                        console.error("Erreur lors de la récupération des fonds :", err.message);
+                        reject(err);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        }
+        // Fin des fonctions de la base de données
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await initializeDatabase();
+                console.log("Base de données des fonds initialisée dans le renderer process");
+                await loadExistingFonds(); // Charger les fonds existants au chargement de la page
+
+                const fondsForm = document.getElementById('fonds-form');
+                const enregistrerBtn = document.getElementById('enregistrer-fonds-btn'); // Correct ID
+                const feedbackDiv = document.getElementById('form-feedback');
+
+
+                fondsForm.addEventListener('submit', async (event) => { // Changed to form submit
+                    event.preventDefault();
+
+                    const nomCrediteur = document.getElementById('nom-crediteur').value;
+                    const sommePercue = parseFloat(document.getElementById('somme-percue').value);
+                    const dateFonds = document.getElementById('date-fonds').value;
+
+                    let hasErrors = false;
+
+                    if (!nomCrediteur) {
+                        document.getElementById('nom-crediteur-error').textContent = "Veuillez entrer le nom du créditeur.";
+                        hasErrors = true;
+                    } else {
+                        document.getElementById('nom-crediteur-error').textContent = "";
+                    }
+                    if (isNaN(sommePercue) || sommePercue <= 0) {
+                        document.getElementById('somme-percue-error').textContent = "Veuillez entrer une somme valide (> 0).";
+                        hasErrors = true;
+                    } else {
+                        document.getElementById('somme-percue-error').textContent = "";
+                    }
+                    if (!dateFonds) {
+                        document.getElementById('date-fonds-error').textContent = "Veuillez entrer la date.";
+                        hasErrors = true;
+                    } else {
+                        document.getElementById('date-fonds-error').textContent = "";
+                    }
+
+                    if (hasErrors) {
+                        // Pas besoin d'ipcRenderer.send ici, on peut afficher directement
+                        alert('Veuillez remplir tous les champs correctement.');
+                        return;
+                    }
+
+                    const nouveauFonds = {
+                        nom_crediteur: nomCrediteur,
+                        somme_percue: sommePercue,
+                        date_fonds: dateFonds
+                    };
+
+                    try {
+                        const fondsId = await enregistrerFonds(nouveauFonds);
+                        if (fondsId) {
+                            console.log("Fonds enregistré avec succès. ID:", fondsId);
+                            fondsForm.reset();
+                            await loadExistingFonds(); // Mettre à jour le tableau après l'enregistrement
+                            feedbackDiv.textContent = "Fonds enregistré avec succès !";
+                            feedbackDiv.style.display = "block";
+                            setTimeout(() => {
+                                feedbackDiv.style.display = "none";
+                            }, 3000);
+                            // Pas besoin de ipcRenderer.send ici, on peut afficher directement
+                            alert('Fonds enregistré avec succès !');
+                        } else {
+                            console.error("Erreur lors de l'enregistrement des fonds.");
+                            // Pas besoin de ipcRenderer.send ici, on peut afficher directement
+                            alert('Erreur lors de l\'enregistrement des fonds.');
+                        }
+                    } catch (error) {
+                        console.error("Erreur lors de l'enregistrement:", error);
+                        // Pas besoin de ipcRenderer.send ici, on peut afficher directement
+                        alert(`Une erreur s'est produite : ${error.message}`);
+                    }
+                });
+
+                async function loadExistingFonds() {
+                    const tableBody = document.querySelector('#fonds-table tbody');
+                    tableBody.innerHTML = ''; // Efface le contenu actuel du tableau
+
+                    try {
+                        const fonds = await getAllFonds();
+                        if (!fonds || fonds.length === 0) {
+                            // Affiche un message si aucun fonds n'est trouvé
+                            const noDataRow = tableBody.insertRow();
+                            const noDataCell = noDataRow.insertCell();
+                            noDataCell.colSpan = 3; // Couvre les 3 colonnes du tableau
+                            noDataCell.textContent = "Aucun fonds enregistré.";
+                            noDataCell.style.textAlign = "center"; // Centre le texte
+                            return; // Arrête l'exécution de la fonction
+                        }
+                        fonds.forEach(fondsItem => {
+                            const row = tableBody.insertRow();
+                            row.insertCell().textContent = fondsItem.nom_crediteur;
+                            row.insertCell().textContent = fondsItem.somme_percue;
+                            row.insertCell().textContent = fondsItem.date_fonds;
+                        });
+                    } catch (error) {
+                        console.error("Erreur lors de la récupération des fonds pour l'affichage:",
+                            error);
+                        // Pas besoin de ipcRenderer.send ici, on peut afficher directement
+                        alert('Erreur lors du chargement des fonds.');
+                    }
+                }
+
+            } catch (error) {
+                console.error("Erreur d'initialisation :", error);
+                // Pas besoin de ipcRenderer.send ici, on peut afficher directement
+                alert(`Erreur : ${error.message}`);
+            }
+        });
+
+        document.getElementById('retour-btn').addEventListener('click', () => {
+            window.location.href = 'pageprincipale.html';
+        });
+    </script>
+</body>
+
+</html>

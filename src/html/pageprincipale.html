@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Page Principale K2N Services</title>
+    <link rel="stylesheet" href="../css/pageprincipale.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <h1>K2N Services</h1>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li class="has-submenu module-card nav-module" data-submenu="enregistre-submenu">
+                <i class="fas fa-plus fa-2x"></i>
+                <span>Enregistrer</span>
+            </li>
+            <li class="has-submenu module-card nav-module" data-submenu="consulter-submenu">
+                <i class="fas fa-search fa-2x"></i>
+                <span>Consulter</span>
+            </li>
+            <li class="has-submenu module-card nav-module" data-submenu="exporter-submenu">
+                <i class="fas fa-upload fa-2x"></i>
+                <span>Exporter</span>
+            </li>
+            <li class="has-submenu module-card nav-module" data-submenu="gerer-tiers-submenu">
+                <i class="fas fa-users fa-2x"></i>
+                <span>Gérer les tiers</span>
+            </li>
+            <li><a href="#parametres" class="module-card">
+                    <i class="fas fa-cog fa-2x"></i>
+                    <span>Paramètres</span>
+                </a></li>
+        </ul>
+    </nav>
+
+    <main class="content-area">
+        <aside class="sidebar">
+            <div id="enregistre-submenu" class="submenu open">
+                <h3>Enregistrer</h3>
+                <ul>
+                    <li><a href="ventes.html">Les ventes</a></li>
+                    <li><a href="fonds.html">Les fonds</a></li>
+                    <li><a href="acquisitions.html">Les acquisitions</a></li>
+                    <li><button class="add-submenu-item" data-parent="enregistre-submenu">+</button></li>
+                </ul>
+            </div>
+
+            <div id="consulter-submenu" class="submenu">
+                <h3>Consulter</h3>
+                <ul>
+                    <li><a href="rapport.html">Rapports</a></li>
+                    <li><a href="etat_des_fonds.html">État des fonds</a></li>
+                    <li><a href="#">Les stocks</a></li>
+                    <li><button class="add-submenu-item" data-parent="consulter-submenu">+</button></li>
+                </ul>
+            </div>
+
+            <div id="exporter-submenu" class="submenu">
+                <h3>Exporter</h3>
+                <ul>
+                    <li><a href="#">Rapport</a></li>
+                    <li><a href="#">État des fonds</a></li>
+                    <li><a href="#">Les stocks</a></li>
+                    <li><button class="add-submenu-item" data-parent="exporter-submenu">+</button></li>
+                </ul>
+            </div>
+
+            <div id="gerer-tiers-submenu" class="submenu">
+                <h3>Gérer les tiers</h3>
+                <ul>
+                    <li><a href="#">Associés</a></li>
+                    <li><a href="#">Employé</a></li>
+                    <li><a href="#">Fournisseur</a></li>
+                    <li><a href="#">Client</a></li>
+                    <li><button class="add-submenu-item" data-parent="gerer-tiers-submenu">+</button></li>
+                </ul>
+            </div>
+        </aside>
+        <div class="logout-container">
+            <button id="logout-btn">Déconnexion</button>
+        </div
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 K2N Services </p>
+    </footer>
+
+    <script src="../js/pageprincipale.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navModules = document.querySelectorAll('.nav-module');
+            const sidebar = document.querySelector('.sidebar');
+            const submenus = document.querySelectorAll('.submenu');
+            const contentArea = document.querySelector('.content-area');
+
+            // Fonction pour fermer la sidebar et tous les sous-menus
+            function closeSidebarAndSubmenus() {
+                sidebar.classList.remove('open');
+                submenus.forEach(submenu => {
+                    submenu.classList.remove('open');
+                });
+                contentArea.classList.remove('sidebar-open');
+                navModules.forEach(module => module.classList.remove('active')); // Supprime la classe active
+            }
+
+            navModules.forEach(module => {
+                module.addEventListener('click', function(event) {
+                    event.stopPropagation(); // Empêche la propagation du clic au document
+
+                    const submenuId = this.dataset.submenu;
+                    const submenu = document.getElementById(submenuId);
+
+                    // Si la sidebar est fermée ou si un autre menu est cliqué
+                    if (!sidebar.classList.contains('open') || (sidebar.classList.contains('open') && !submenu.classList.contains('open'))) {
+                        closeSidebarAndSubmenus(); // Ferme tout
+                        sidebar.classList.add('open'); // Ouvre la sidebar
+                        submenu.classList.add('open'); // Ouvre le sous-menu cliqué
+                        contentArea.classList.add('sidebar-open'); // Décale le contenu
+                        this.classList.add('active'); // Ajoute la classe active au menu cliqué
+                    } else {
+                        closeSidebarAndSubmenus(); // Ferme tout si le même menu est cliqué
+                    }
+                });
+            });
+
+            // Ferme la sidebar et les sous-menus si on clique en dehors du menu ou de la sidebar
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.main-nav, .sidebar')) {
+                    closeSidebarAndSubmenus();
+                }
+            });
+
+            // Gestion de la déconnexion (inchangée)
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

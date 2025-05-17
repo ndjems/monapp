@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Enregistrer - K2N Services</title>
+    <link rel="stylesheet" href="../css/ventes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 0.5em;
+        }
+
+        #frais-group {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Enregistrer une Vente</h1>
+    </header>
+
+    <main class="enregistrer-content-desktop">
+        <section id="enregistrer|     <h2>Formulaire</h2>
+            <form id="vente-form" class="vente-form-desktop">
+                <fieldset class="form-fieldset acteurs-fieldset">
+                    <legend>Acteurs</legend>
+                    <div class="form-group">
+                        <label for="responsable">Responsable de la vente:</label>
+                        <input type="text" id="responsable" name="responsable" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="livreur">Nom du Livreur (si livraison):</label>
+                        <input type="text" id="livreur" name="livreur">
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-fieldset details-fieldset">
+                    <legend>Détails de la Vente</legend>
+                    <div class="form-group">
+                        <label for="quantite">Quantité:</label>
+                        <input type="number" id="quantite" name="quantite" required>
+                        <div id="quantite-error" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="montant-net">Montant Net:</label>
+                        <input type="number" id="montant-net" name="montant-net" step="0.01" required>
+                        <div id="montant-net-error" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="montant-recu">Montant Reçu:</label>
+                        <input type="number" id="montant-recu" name="montant-recu" step="0.01" required>
+                        <div id="montant-recu-error" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mode-paiement">Mode de Paiement:</label>
+                        <select id="mode-paiement" name="mode-paiement" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="cash">Cash</option>
+                            <option value="orange-money">Orange Money</option>
+                            <option value="mobile-money">Mobile Money</option>
+                        </select>
+                    </div>
+                    <div id="frais-group" class="form-group" style="display: none;">
+                        <label for="frais">Frais (Orange Money/Mobile Money):</label>
+                        <input type="number" id="frais" name="frais" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="date-vente">Date de la Vente:</label>
+                        <input type="date" id="date-vente" name="date-vente" required>
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+        <section>
+            <div class="form-actions-desktop">
+                <button id="retour-btn">Retour</button>
+                <button id="enregistrer-btn" type="button">Enregistrer la Vente</button>
+            </div>
+        </section>
+        <section id="liste-ventes" class="enregistrement-section-desktop">
+            <h2>Liste des Ventes</h2>
+            <div id="ventes-table-container">
+                <table id="ventes-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Responsable</th>
+                            <th>Quantité</th>
+                            <th>Montant Net</th>
+                            <th>Montant Reçu</th>
+                            <th>Mode Paiement</th>
+                            <th>Frais</th>
+                            <th>Livreur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Chemin relatif vers le fichier ventesModel.js
+        const { initializeDatabase, enregistrerVente, getAllVentes } = require('models/ventesModel');
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await initializeDatabase();
+    await mettreAJourTableauVentes();
+
+    const venteForm = document.getElementById('vente-form');
+    const modePaiementSelect = document.getElementById('mode-paiement');
+    const fraisGroup = document.getElementById('frais-group');
+
+    modePaiementSelect.addEventListener('change', () => {
+        if (modePaiementSelect.value === 'orange-money' || modePaiementSelect.value === 'mobile-money') {
+            fraisGroup.style.display = 'block';
+        } else {
+            fraisGroup.style.display = 'none';
+        }
+    });
+
+    venteForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const responsable = document.getElementById('responsable').value;
+        const livreur = document.getElementById('livreur').value;
+        const quantiteInput = document.getElementById('quantite');
+        const montantNetInput = document.getElementById('montant-net');
+        const montantRecuInput = document.getElementById('montant-recu');
+        const modePaiement = document.getElementById('mode-paiement').value;
+        const dateVente = document.getElementById('date-vente').value;
+        const frais = parseFloat(document.getElementById('frais').value) || 0;
+
+        const quantite = parseInt(quantiteInput.value);
+        const montantNet = parseFloat(montantNetInput.value);
+        const montantRecu = parseFloat(montantRecuInput.value);
+
+        let isValid = true;
+        const errors = {};
+
+        if (isNaN(quantite) || quantite < 0) {
+            errors.quantite = "La quantité doit être un nombre positif ou zéro.";
+            isValid = false;
+        }
+        if (isNaN(montantNet) || montantNet < 0) {
+            errors.montantNet = "Le montant net doit être un nombre positif ou zéro.";
+            isValid = false;
+        }
+        if (isNaN(montantRecu) || montantRecu < 0) {
+            errors.montantRecu = "Le montant reçu doit être un nombre positif ou zéro.";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            console.error("Erreurs de validation:", errors);
+            // Affichez les erreurs à l'utilisateur dans votre HTML, par exemple:
+            // document.getElementById('quantite-error').textContent = errors.quantite;
+            return;
+        }
+
+        const nouvelleVente = {
+            responsable: responsable,
+            livreur: livreur,
+            quantite: quantite,
+            'montant-net': montantNet,
+            'montant-recu': montantRecu,
+            'mode-paiement': modePaiement,
+            'date-vente': dateVente,
+            frais: frais
+        };
+
+        try {
+            const venteId = await enregistrerVente(nouvelleVente);
+            if (venteId) {
+                console.log("Vente enregistrée avec succès. ID:", venteId);
+                venteForm.reset();
+                fraisGroup.style.display = 'none';
+                await mettreAJourTableauVentes(); // IMPORTANT : Attendre la mise à jour du tableau
+            } else {
+                console.error("Erreur lors de l'enregistrement de la vente.");
+                // Affichez un message d'erreur à l'utilisateur
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'enregistrement:", error);
+            // Affichez un message d'erreur à l'utilisateur
+        }
+    });
+});
+
+async function mettreAJourTableauVentes() {
+    const tableBody = document.querySelector('#ventes-table tbody');
+    if (!tableBody) {
+        console.error("Erreur : Corps de tableau '<tbody>' non trouvé dans le HTML.");
+        return;
+    }
+    tableBody.innerHTML = '';
+
+    try {
+        const ventes = await getAllVentes();
+        if (!ventes || ventes.length === 0) {
+            console.warn("Aucune vente à afficher.");
+            // Vous pouvez afficher un message à l'utilisateur dans le tableau
+            const emptyRow = tableBody.insertRow();
+            const emptyCell = emptyRow.insertCell();
+            emptyCell.colSpan = 8; // Nombre de colonnes dans votre tableau
+            emptyCell.textContent = "Aucune vente enregistrée.";
+            emptyCell.style.textAlign = "center";
+            return; // Arrêtez la fonction ici
+        }
+        ventes.forEach(vente => {
+            const row = tableBody.insertRow();
+            row.insertCell().textContent = vente.date_vente;
+            row.insertCell().textContent = vente.responsable;
+            row.insertCell().textContent = vente.quantite;
+            row.insertCell().textContent = vente.montant_net;
+            row.insertCell().textContent = vente.montant_recu;
+            row.insertCell().textContent = vente.mode_paiement;
+            row.insertCell().textContent = vente.frais || '';
+            row.insertCell().textContent = vente.livreur || '';
+        });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des ventes pour l'affichage:", error);
+        // Affichez un message d'erreur à l'utilisateur
+    }
+}
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport des Ventes</title>
+    <link rel="stylesheet" href="../css/rapport.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <h1>Rapport des Ventes</h1>
+    </header>
+
+    <main class="rapport-content">
+        <section id="options-rapport" class="rapport-section">
+            <h2>Rapport</h2>
+            <fieldset class="form-fieldset">
+                <legend>Options de Rapport</legend>
+                <div class="form-group">
+                    <label for="type-rapport">Type de Rapport:</label>
+                    <select id="type-rapport">
+                        <option value="jour">Jour Spécifique</option>
+                        <option value="periode">Période Spécifique</option>
+                        <option value="mois" selected>Mensuel</option>
+                        <option value="annee">Annuel</option>
+                    </select>
+                </div>
+                
+                <div id="date-specifique-container" style="display: block;">
+                    <div class="form-group">
+                        <label for="date-unique">Choisir un Jour:</label>
+                        <input type="date" id="date-unique">
+                    </div>
+                </div>
+                
+                <div id="periode-specifique-container" style="display: none;">
+                    <div class="form-group">
+                        <label for="date-debut">Date de Début:</label>
+                        <input type="date" id="date-debut">
+                    </div>
+                    <div class="form-group">
+                        <label for="date-fin">Date de Fin:</label>
+                        <input type="date" id="date-fin">
+                    </div>
+                </div>
+            </fieldset>
+        </section>
+        
+        <div class="button-container">
+            <button id="retour-btn">Retour</button>
+            <button id="generer-rapport-btn">Générer le Rapport</button>
+        </div>
+        
+        <section id="statistiques-ventes" class="rapport-section">
+            <h2>Statistiques des Ventes</h2>
+            <canvas id="ventesChart"></canvas>
+            <div id="rapport-container">
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/rapport.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('retour-btn').addEventListener('click', () => {
+            window.location.href = 'pageprincipale.html';
+        });
+    </script>
+</body>
+
+</html> 

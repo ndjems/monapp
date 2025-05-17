@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0Hhonpy AIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="../assets/k2n_Group0_Profile.png" alt="Logo de l'application">
+            <h1>Bienvenue</h1>
+            <p>Connectez-vous pour continuer</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" required>
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+            </div>
+            <button type="submit"> se connecter </button>
+            <div class="login-footer">
+                <a href="#">Mot de passe oublié ?</a>
+                <span>Nouveau ici ? <a href="#">Créer un compte</a></span>
+            </div>
+            <p class="error-message" id="errorMessage"></p>
+        </form>
+    </div>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+
+                ipcRenderer.send('login-request', { username, password });
+            });
+
+            ipcRenderer.on('login-response', (event, response) => {
+                if (response.success) {
+                    console.log('✅ Connexion réussie, redirection vers pageprincipale.html...');
+                    window.location.href = 'pageprincipale.html';
+                } else {
+                    console.error('❌ Échec de connexion :', response.message);
+                    errorMessage.textContent = response.message || 'Erreur de connexion.';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
